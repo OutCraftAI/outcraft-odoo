@@ -28,12 +28,9 @@
                         <button name="action_outcraft_test" type="object" string="Send test event"
                                 class="btn-link ps-0 mt8" invisible="not outcraft_consent or not outcraft_trigger_url"/>
                         <div class="text-muted mt8">
-                            Carts are sent when they have a phone number and stay untouched for the time above.
-                            Odoo asks for a phone at checkout by default. Confirmed website orders are sent too, so
-                            Outcraft stops contacting shoppers who paid. Data sent: order id and reference, customer name,
-                            phone, email, country, language, timezone, cart lines (product, quantity, unit price), totals,
-                            tax, shipping, currency, discount codes, shipping address and a link back to the cart.
-                            Nothing is sent until this box is ticked and a URL is saved.
+                            Sends carts with a phone that stay untouched this long, and paid orders so Outcraft
+                            stops contacting buyers. Data sent: customer contact details and address, cart items and
+                            totals, discount codes and a cart link.
                         </div>
                     </div>
                 </setting>
