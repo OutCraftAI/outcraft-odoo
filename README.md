@@ -82,18 +82,16 @@ Every event is a JSON POST to the configured trigger URL, and nothing goes anywh
 
 **What data is sent:** see the table above. The same list appears in the manifest `description`, in `index.html` and in the opt-in setting itself, as Odoo's vendor guidelines require for apps that send data to an external service.
 
-### Assets a designer must replace
+### Listing assets
 
-The current images are generated placeholders:
-
-- `outcraft_cart_recovery/static/description/icon.png`: 256×256 PNG app icon. It must be a real PNG.
-- `outcraft_cart_recovery/static/description/cover.png`: 1120×560 cover/thumbnail, referenced by the manifest `images` key.
-- `outcraft_cart_recovery/static/description/settings_screenshot.png` is a real screenshot of the settings block, taken from the test shop and listed in `images`. Retake it if the settings change.
+- `outcraft_cart_recovery/static/description/icon.png`: 256×256 PNG app icon, the Outcraft mark (white on #212121). It was rendered from the official Outcraft logo.
+- `outcraft_cart_recovery/static/description/cover.png`: 1120×560 cover, the full Outcraft logo and a tagline, referenced by the manifest `images` key.
+- `outcraft_cart_recovery/static/description/settings_screenshot.png`: a real screenshot of the settings block, taken from the test shop and listed in `images`. Retake it if the settings change.
 
 ### Before publishing
 
-- **Vendor fields.** Set `author` in `__manifest__.py` to the exact vendor name of your apps.odoo.com account, and add a `support` email.
-- **Description content.** `index.html` must have no external links other than YouTube or `mailto:`, and no JavaScript. The current file has no links at all.
+- **Vendor name.** `author` in `__manifest__.py` is "Outcraft". It must match the vendor name of your apps.odoo.com account exactly. Support goes to `hey@outcraft.ai`, set in the manifest `support` key and linked with `mailto:` in the description.
+- **Description content.** `index.html` must have no external links other than YouTube or `mailto:`, and no JavaScript. The only link in the current file is the `mailto:` support address.
 - **Repository.** Push this repo to GitHub with branch `20.0`, then register it on apps.odoo.com as `ssh://git@github.com/<org>/outcraft-odoo#20.0`.
 
 ## Development and tests

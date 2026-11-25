@@ -16,6 +16,7 @@ cart. Only carts with a phone number are sent as abandoned.
     "category": "Website/Website",
     "author": "Outcraft",
     "website": "https://outcraft.ai",
+    "support": "hey@outcraft.ai",
     "license": "LGPL-3",
     "depends": ["website_sale", "phone_validation"],
     "data": [
