@@ -22,7 +22,7 @@ cart. Only carts with a phone number are sent as abandoned.
         "data/ir_cron.xml",
         "views/res_config_settings_views.xml",
     ],
-    "images": ["static/description/cover.png"],
+    "images": ["static/description/cover.png", "static/description/settings_screenshot.png"],
     "installable": True,
     "uninstall_hook": "uninstall_hook",
 }

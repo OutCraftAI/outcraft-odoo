@@ -1,10 +1,12 @@
 import logging
 import re
+import time
 from datetime import timedelta
 
 import requests
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -26,6 +28,10 @@ def _clean(values):
     return {k: v for k, v in values.items() if v or v == []}
 
 
+def _phone(partner):
+    return partner.phone and (partner._phone_format(fname="phone") or partner.phone)
+
+
 def _split_name(name):
     first, _, last = (name or "").partition(" ")
     return first, last
@@ -37,6 +43,32 @@ class ResConfigSettings(models.TransientModel):
     outcraft_consent = fields.Boolean("Send customer data to Outcraft", config_parameter="outcraft.consent")
     outcraft_trigger_url = fields.Char("Outcraft trigger URL", config_parameter="outcraft.trigger_url")
     outcraft_delay = fields.Integer("Abandoned after (minutes)", config_parameter="outcraft.delay", default=60)
+
+    def action_outcraft_test(self):
+        """Send a sample cart and, right after, its completion, so Outcraft shows the event but never contacts anyone."""
+        self.ensure_one()
+        if not (self.outcraft_consent and self.outcraft_trigger_url):
+            raise UserError(self.env._("Tick \"Send carts to Outcraft\" and paste your Outcraft trigger URL first."))
+        company = self.env.company
+        sample = _clean({
+            "unique_id": f"odoo-test-{int(time.time())}",
+            "phone": _phone(company.partner_id),
+            "email": company.email,
+            "first_name": "Test",
+            "last_name": "Shopper",
+            "country_code": company.country_id.code,
+            "final_price": "10.00",
+            "currency": company.currency_id.name,
+            "items": [{"id": "test", "name": "Test product", "quantity": 1, "price": "10.00"}],
+            "cart_link": f"{(self.website_id or self).get_base_url()}/shop/cart",
+            "context": {"odoo_test_event": True},
+        })
+        sent = all(_post(self.outcraft_trigger_url, {**sample, "outcraft_event": event})
+                   for event in ("checkout/updated", "checkout/completed"))
+        message = (self.env._("Test event sent. Open your trigger in Outcraft to see it. Click Save here if you haven't.")
+                   if sent else self.env._("Outcraft did not accept the test event. Check the URL; details are in the server log."))
+        return {"type": "ir.actions.client", "tag": "display_notification",
+                "params": {"message": message, "type": "success" if sent else "danger"}}
 
 
 class SaleOrder(models.Model):
@@ -54,7 +86,6 @@ class SaleOrder(models.Model):
         self.ensure_one()
         partner, ship = self.partner_id, self.partner_shipping_id
         money = lambda amount: f"{amount:.{self.currency_id.decimal_places}f}"  # noqa: E731
-        phone = lambda p: p.phone and (p._phone_format(fname="phone") or p.phone)  # noqa: E731
         first, last = _split_name(partner.name)
         ship_first, ship_last = _split_name(ship.name)
         codes = []
@@ -63,7 +94,7 @@ class SaleOrder(models.Model):
         payload = _clean({
             "outcraft_event": event,
             "unique_id": str(self.id),
-            "phone": phone(partner) or phone(ship),
+            "phone": _phone(partner) or _phone(ship),
             "email": partner.email,
             "first_name": first,
             "last_name": last,
@@ -90,7 +121,7 @@ class SaleOrder(models.Model):
                 "province_code": ship.state_id.code,
                 "zip": ship.zip,
                 "country_code": ship.country_id.code,
-                "phone": phone(ship),
+                "phone": _phone(ship),
             }),
             "context": {"odoo_order": self.name},
         })

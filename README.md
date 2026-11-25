@@ -12,15 +12,16 @@ The module runs on the merchant's Odoo server. It POSTs JSON to the trigger URL 
 
 Requires Odoo 20.0 on-premise or on Odoo.sh, with the eCommerce app installed. Odoo Online (SaaS) can't run third-party modules that contain Python code, so this module can't be used there.
 
-1. **Outcraft:** create an abandoned-checkout campaign with a **Custom API** trigger and copy its URL (`https://app.outcraft.ai/api/v1/trigger/<token>`).
+1. **Outcraft:** create an abandoned-checkout campaign with a **Custom API** trigger and copy the URL shown under **Send events to this endpoint** (`https://app.outcraft.ai/api/v1/trigger/<token>`).
 2. **Install the module**, using one of these:
    - From the Odoo Apps Store: download the module and unzip it into your addons path.
    - On Odoo.sh: add it to your repository.
    - From source: copy the `outcraft_cart_recovery` folder into a directory on your `addons_path`.
 
    Then restart Odoo, go to **Apps**, choose **Update Apps List**, search for "Outcraft" and click **Activate**.
-3. **Configure:** go to **Website → Configuration → Settings → Send carts to Outcraft**. Tick the box (this is the opt-in, and it lists exactly what is sent), paste the trigger URL and click **Save**.
-4. Optional: change **Abandoned after (minutes)**. The default is 60.
+3. **Configure:** go to **Website → Configuration → Settings → Send carts to Outcraft**. The same steps are shown there. Tick the box (this is the opt-in, and it lists exactly what is sent), paste the trigger URL and click **Save**.
+4. **Test:** click **Send test event**. Outcraft receives a sample `checkout/updated` immediately followed by its `checkout/completed` (unique_id `odoo-test-<timestamp>`), so the trigger shows an event and nobody is contacted. Odoo shows a green or red notification.
+5. Optional: change **Abandoned after**. The default is 60 minutes.
 
 Nothing is sent until the box is ticked and a URL is saved. Carts and orders from before the box was ticked are never sent. Untick the box to stop all sending. Uninstalling the module also deletes its settings, so a later reinstall starts disabled.
 
@@ -87,7 +88,7 @@ The current images are generated placeholders:
 
 - `outcraft_cart_recovery/static/description/icon.png`: 256×256 PNG app icon. It must be a real PNG.
 - `outcraft_cart_recovery/static/description/cover.png`: 1120×560 cover/thumbnail, referenced by the manifest `images` key.
-- Recommended: one or two real screenshots, such as the settings block and a recovered order. Add them to `images` with a name ending in `_screenshot.png` (Odoo shows the first one large), and optionally reference them in `index.html` with a relative `src`.
+- `outcraft_cart_recovery/static/description/settings_screenshot.png` is a real screenshot of the settings block, taken from the test shop and listed in `images`. Retake it if the settings change.
 
 ### Before publishing
 
@@ -109,6 +110,10 @@ dev/run-tests.sh            # ~2 minutes; prints each scenario and every capture
 open http://localhost:18069 # the test shop (database "shop", demo data)
 docker compose -f dev/docker-compose.yml down -v
 ```
+
+## Phone numbers at checkout
+
+Merchants don't need to change anything. Odoo 20's checkout address form already requires a phone number (`portal` adds `phone` to the mandatory billing and delivery fields). The exceptions are checkouts that need no address at all, such as Odoo's quick checkout for event tickets, and express checkout with Apple Pay or Google Pay when the wallet doesn't share a phone. Carts from shoppers who leave before the address step have no phone, so they aren't sent.
 
 ## Known limitations
 

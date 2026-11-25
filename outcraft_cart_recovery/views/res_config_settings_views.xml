@@ -10,20 +10,30 @@
                          help="I agree to send customer data to Outcraft (outcraft.ai) so its AI agents can call, text and email shoppers who abandon their cart. Requires an Outcraft account.">
                     <field name="outcraft_consent"/>
                     <div class="content-group">
-                        <div class="text-muted mt8">
-                            Sent for carts that have a phone number and are left untouched, and for every confirmed
-                            website order: order id and reference, customer name, phone, email, country, language,
-                            timezone, cart lines (product, quantity, unit price), totals, tax, shipping, currency,
-                            discount codes, shipping address and a link back to the cart.
-                            Nothing is sent until this box is ticked and a trigger URL is set.
-                        </div>
+                        <div class="mt8"><b>How to connect</b></div>
+                        <ol class="text-muted ps-3 mb-0">
+                            <li>In Outcraft, create an abandoned-checkout campaign and choose the <b>Custom API</b> trigger.</li>
+                            <li>Copy the URL shown under <b>Send events to this endpoint</b>.</li>
+                            <li>Tick the box above, paste the URL below and click <b>Save</b>.</li>
+                            <li>Click <b>Send test event</b>. The event appears in Outcraft, and no one is contacted.</li>
+                        </ol>
                         <div class="row mt16">
-                            <label for="outcraft_trigger_url" class="col-lg-4 o_light_label"/>
-                            <field name="outcraft_trigger_url" placeholder="https://app.outcraft.ai/api/v1/trigger/..."/>
+                            <label for="outcraft_trigger_url" string="Trigger URL" class="col-lg-4 o_light_label"/>
+                            <field name="outcraft_trigger_url" class="col-lg-8" placeholder="https://app.outcraft.ai/api/v1/trigger/..."/>
                         </div>
                         <div class="row">
-                            <label for="outcraft_delay" class="col-lg-4 o_light_label"/>
-                            <field name="outcraft_delay"/>
+                            <label for="outcraft_delay" string="Abandoned after" class="col-lg-4 o_light_label"/>
+                            <div class="col-lg-8"><field name="outcraft_delay" class="oe_inline"/> minutes</div>
+                        </div>
+                        <button name="action_outcraft_test" type="object" string="Send test event"
+                                class="btn-link ps-0 mt8" invisible="not outcraft_consent or not outcraft_trigger_url"/>
+                        <div class="text-muted mt8">
+                            Carts are sent when they have a phone number and stay untouched for the time above.
+                            Odoo asks for a phone at checkout by default. Confirmed website orders are sent too, so
+                            Outcraft stops contacting shoppers who paid. Data sent: order id and reference, customer name,
+                            phone, email, country, language, timezone, cart lines (product, quantity, unit price), totals,
+                            tax, shipping, currency, discount codes, shipping address and a link back to the cart.
+                            Nothing is sent until this box is ticked and a URL is saved.
                         </div>
                     </div>
                 </setting>

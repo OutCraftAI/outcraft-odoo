@@ -52,11 +52,13 @@
             <h3 style="color: #181638;">Setup</h3>
             <ol>
                 <li>In Outcraft, create an abandoned-checkout campaign with a <b>Custom API</b> trigger and copy its
-                    URL. It looks like <code>https://app.outcraft.ai/api/v1/trigger/&lt;token&gt;</code>.</li>
+                    URL, shown under <b>Send events to this endpoint</b>. It looks like <code>https://app.outcraft.ai/api/v1/trigger/&lt;token&gt;</code>.</li>
                 <li>Install this module.</li>
                 <li>Go to <b>Website &gt; Configuration &gt; Settings</b>, find <b>Send carts to Outcraft</b>, tick the
-                    box, paste the trigger URL and save.</li>
-                <li>Optionally change <b>Abandoned after (minutes)</b> (default 60).</li>
+                    box, paste the trigger URL and save. The same steps are shown right there in the settings.</li>
+                <li>Click <b>Send test event</b>. Outcraft receives a sample cart followed by its completion, so the
+                    connection shows up in Outcraft and no one is contacted.</li>
+                <li>Optionally change <b>Abandoned after</b> (default 60 minutes).</li>
             </ol>
             <p>Nothing is sent until the box is ticked and a URL is set. Carts and orders from before that moment are
                 never sent. Untick the box to stop sending at any time.</p>
