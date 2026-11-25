@@ -1,0 +1,28 @@
+# Local test stack: Odoo 20 + Postgres + a request catcher standing in for Outcraft.
+# Outcraft trigger URL to use inside Odoo: http://catcher:8000/api/v1/trigger/test-token
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_DB: postgres
+  odoo:
+    image: odoo:20.0
+    depends_on: [db]
+    ports: ["18069:8069"]
+    environment:
+      HOST: db
+      USER: odoo
+      PASSWORD: odoo
+    volumes:
+      - ..:/mnt/extra-addons:ro
+      - odoo-data:/var/lib/odoo
+  catcher:
+    image: python:3.12-alpine
+    command: python -u /app/catcher.py
+    volumes:
+      - ./catcher.py:/app/catcher.py:ro
+      - ./out:/data
+volumes:
+  odoo-data:

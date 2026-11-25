@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.outcraft</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="website_sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <setting id="abandoned_carts_setting" position="after">
+                <setting id="outcraft_setting" string="Send carts to Outcraft"
+                         help="I agree to send customer data to Outcraft (outcraft.ai) so its AI agents can call, text and email shoppers who abandon their cart. Requires an Outcraft account.">
+                    <field name="outcraft_consent"/>
+                    <div class="content-group">
+                        <div class="text-muted mt8">
+                            Sent for carts that have a phone number and are left untouched, and for every confirmed
+                            website order: order id and reference, customer name, phone, email, country, language,
+                            timezone, cart lines (product, quantity, unit price), totals, tax, shipping, currency,
+                            discount codes, shipping address and a link back to the cart.
+                            Nothing is sent until this box is ticked and a trigger URL is set.
+                        </div>
+                        <div class="row mt16">
+                            <label for="outcraft_trigger_url" class="col-lg-4 o_light_label"/>
+                            <field name="outcraft_trigger_url" placeholder="https://app.outcraft.ai/api/v1/trigger/..."/>
+                        </div>
+                        <div class="row">
+                            <label for="outcraft_delay" class="col-lg-4 o_light_label"/>
+                            <field name="outcraft_delay"/>
+                        </div>
+                    </div>
+                </setting>
+            </setting>
+        </field>
+    </record>
+</odoo>

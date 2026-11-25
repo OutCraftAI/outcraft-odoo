@@ -1,0 +1,99 @@
+<section class="container" style="padding: 24px 16px;">
+    <div class="row">
+        <div class="col-12 text-center" style="margin-bottom: 24px;">
+            <h2 style="color: #181638; font-weight: 700;">Outcraft Cart Recovery</h2>
+            <p class="lead" style="color: #555;">
+                Send abandoned eCommerce carts to Outcraft, whose AI agents call, text and email the shopper
+                to help them finish the order. Confirmed orders are sent too, so outreach stops as soon as
+                the shopper pays.
+            </p>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 24px;">
+        <div class="col-md-4" style="padding: 8px;">
+            <div style="border: 1px solid #e3e3ef; border-radius: 8px; padding: 16px;">
+                <h4 style="color: #181638;">Abandoned carts</h4>
+                <p>Every 15 minutes, website carts that have a phone number and have not changed for 60 minutes
+                    (configurable) are sent to Outcraft once, with a link that reopens the cart.</p>
+            </div>
+        </div>
+        <div class="col-md-4" style="padding: 8px;">
+            <div style="border: 1px solid #e3e3ef; border-radius: 8px; padding: 16px;">
+                <h4 style="color: #181638;">Confirmed orders</h4>
+                <p>When a website order is confirmed, it is sent with the same id as its cart, so Outcraft
+                    stops contacting that shopper and can report recovered revenue.</p>
+            </div>
+        </div>
+        <div class="col-md-4" style="padding: 8px;">
+            <div style="border: 1px solid #e3e3ef; border-radius: 8px; padding: 16px;">
+                <h4 style="color: #181638;">Checkout is never slowed down</h4>
+                <p>Nothing is sent from the checkout itself. A scheduled action sends events in the background
+                    with a short timeout and retries failed sends on its next run.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 24px;">
+        <div class="col-12">
+            <h3 style="color: #181638;">Requirements</h3>
+            <ul>
+                <li><b>An Outcraft account.</b> This module only sends events; the calls, SMS and emails are made by
+                    Outcraft, a separate service. Without an account the module does nothing.</li>
+                <li>Odoo 20.0 with the eCommerce app (<code>website_sale</code>).</li>
+                <li>Odoo on-premise or Odoo.sh. Like every third-party module that contains Python code, it cannot
+                    be installed on Odoo Online (SaaS).</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 24px;">
+        <div class="col-12">
+            <h3 style="color: #181638;">Setup</h3>
+            <ol>
+                <li>In Outcraft, create an abandoned-checkout campaign with a <b>Custom API</b> trigger and copy its
+                    URL. It looks like <code>https://app.outcraft.ai/api/v1/trigger/&lt;token&gt;</code>.</li>
+                <li>Install this module.</li>
+                <li>Go to <b>Website &gt; Configuration &gt; Settings</b>, find <b>Send carts to Outcraft</b>, tick the
+                    box, paste the trigger URL and save.</li>
+                <li>Optionally change <b>Abandoned after (minutes)</b> (default 60).</li>
+            </ol>
+            <p>Nothing is sent until the box is ticked and a URL is set. Carts and orders from before that moment are
+                never sent. Untick the box to stop sending at any time.</p>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 24px;">
+        <div class="col-12">
+            <h3 style="color: #181638;">Data sent to Outcraft</h3>
+            <p>Each event is an HTTPS POST of JSON to the trigger URL you configured. Nothing else is sent, and no
+                data is sent anywhere else.</p>
+            <table class="table table-sm table-bordered">
+                <thead>
+                    <tr><th>When</th><th>Event</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>A website cart with a phone number is left untouched for the configured time
+                        (sent once per cart)</td><td><code>checkout/updated</code></td></tr>
+                    <tr><td>A website order is confirmed</td><td><code>checkout/completed</code></td></tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <thead>
+                    <tr><th>Field</th><th>Content</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Order</td><td>Odoo order id and reference</td></tr>
+                    <tr><td>Customer</td><td>First and last name, phone, email, country, language, timezone</td></tr>
+                    <tr><td>Cart lines</td><td>Product id, product name, quantity, unit price</td></tr>
+                    <tr><td>Totals</td><td>Total, tax, shipping, currency</td></tr>
+                    <tr><td>Discounts</td><td>Applied coupon and promotion codes</td></tr>
+                    <tr><td>Shipping address</td><td>Name, street, city, state, zip, country, phone</td></tr>
+                    <tr><td>Cart link</td><td>A link that reopens this cart (abandoned carts only)</td></tr>
+                </tbody>
+            </table>
+            <p>Outcraft uses this data to contact the shopper on your behalf and to report results. See the privacy
+                policy on outcraft.ai for how Outcraft processes it.</p>
+        </div>
+    </div>
+</section>
