@@ -84,9 +84,11 @@ Every event is a JSON POST to the configured trigger URL, and nothing goes anywh
 
 ### Listing assets
 
-- `outcraft_cart_recovery/static/description/icon.png`: 256×256 PNG app icon, the Outcraft mark (white on #212121). It was rendered from the official Outcraft logo.
-- `outcraft_cart_recovery/static/description/cover.png`: 1120×560 cover, the full Outcraft logo and a tagline, referenced by the manifest `images` key.
-- `outcraft_cart_recovery/static/description/settings_screenshot.png`: a real screenshot of the settings block, taken from the test shop and listed in `images`. Retake it if the settings change.
+- `outcraft_cart_recovery/static/description/icon.png`: 256×256 PNG app icon, the white Outcraft mark on a purple gradient.
+- `outcraft_cart_recovery/static/description/cover.png`: 1120×560 cover ("Win back abandoned checkouts"). It is the first entry in the manifest `images` key.
+- `how_it_works.png`, `channels.png`, `recovered_revenue.png`, `conversation_review.png` (same folder): 1120×560 carousel images, listed in `images` in this order.
+
+All listing images are 1120×560 (2:1), so keep new ones at that size.
 
 ### Before publishing
 
